@@ -1,10 +1,10 @@
 <template>
     <div>
         <transition-group name="list" tag="ul">
-            <li v-for="(todoItem, index) in this.$store.state.todoItems" v-bind:key="todoItem.item">
-                <i class="checkBtn fas fa-check" v-bind:class="{ checkBtnCompleted: todoItem.completed }" v-on:click="toggleComplete(todoItem, index)"></i>
+            <li v-for="(todoItem, index) in this.todoItems" v-bind:key="todoItem.item">
+                <i class="checkBtn fas fa-check" v-bind:class="{ checkBtnCompleted: todoItem.completed }" v-on:click="toggleComplete({ todoItem, index })"></i>
                 <span class="textItem" v-bind:class="{ textCompleted: todoItem.completed }">{{ todoItem.item }}</span>
-                <span v-on:click="removeTodo(todoItem, index)">
+                <span v-on:click="removeTodo({ todoItem, index })">
                     <i class="fas fa-trash-alt"></i>
                 </span>
             </li>
@@ -13,14 +13,30 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from "vuex";
+
 export default {
     methods: {
-        removeTodo(todoItem, index) {
-            this.$store.commit("removeOneItem", { todoItem, index });
-        },
-        toggleComplete(todoItem, index) {
-            this.$store.commit("toggleOneItem", { todoItem, index });
-        },
+        // removeTodo(todoItem, index) {
+        //     this.$store.commit("removeOneItem", { todoItem, index });
+        // },
+        // 위의 removeTodo는 아래의 mapMutaions 방법으로 사용이 가능하고 인자가 복수로 넘길 경우에는 템플릿에서 넘겨준 인자값을 그대로 받는다. 하지만 복수로 넘겨줄 때 객체로 념겨줘야한다.
+        ...mapMutations({
+            removeTodo: "removeOneItem",
+            toggleComplete: "toggleOneItem",
+        }),
+    },
+    computed: {
+        // 1번 방법
+        // todoItems() {
+        //     return this.$store.getters.storedTodoItems;
+        // },
+        // 2번 방법
+        // ...mapGetters(["storedTodoItems"]),
+        // 3번 방법
+        ...mapGetters({
+            todoItems: "storedTodoItems",
+        }),
     },
 };
 </script>
