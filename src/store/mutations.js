@@ -13,7 +13,7 @@ const removeOneItem = (state, payload) => {
 
 const toggleOneItem = (state, payload) => {
   const { todoItem, index } = payload;
-  // todoItem.completed = !todoItem.completed;
+  // todoItem.completed = !todoItem.completed;;
   state.todoItems[index].completed = !state.todoItems[index].completed;
   localStorage.removeItem(todoItem.item);
   localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
